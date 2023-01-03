@@ -1,4 +1,5 @@
 import lib.CoreTestCase;
+import lib.ui.MainPageObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -9,6 +10,37 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static java.lang.Thread.sleep;
 
 public class WikipediaTests extends CoreTestCase {
+	private MainPageObject mainPageObject;
+
+
+	protected void setUp() throws Exception {
+		super.setUp();
+
+		mainPageObject = new MainPageObject(driver);
+	}
+
+	@Test
+	public void testSearch() {
+		mainPageObject.waitForElementByXpathAndClick(
+				"//*[contains(@text, 'Search Wikipedia')]",
+				"Cannot find search wikipedia input",
+				5
+		);
+
+		mainPageObject.waitForElementByXpathAndSendKeys(
+				"//*[contains(@text, 'Search…')]",
+				"Java",
+				"Cannot find search input",
+				5
+		);
+
+		mainPageObject.waitForElementPresentByXpath(
+				"//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']",
+				"Cannot find 'Object-oriented programming language' topic searching by 'Java'",
+				15
+		);
+	}
+
 	@Test
 	public void sendKeysTest() throws InterruptedException {
 		WebElement element_to_init_search = driver.findElementByXPath("//*[contains(@text, 'Search Wikipedia')]");
@@ -24,7 +56,7 @@ public class WikipediaTests extends CoreTestCase {
 		WebElement element_to_init_search = driver.findElementByXPath("//*[contains(@text, 'Search Wikipedia')]");
 		element_to_init_search.click();
 
-		WebElement element_to_enter_search_line = waitForElementPresentByXpath(
+		WebElement element_to_enter_search_line = mainPageObject.waitForElementPresentByXpath(
 				"//*[contains(@text, 'Search…')]",
 				"Cannot find seaerch input",
 				5
@@ -46,17 +78,9 @@ public class WikipediaTests extends CoreTestCase {
 		element_to_enter_search_line.sendKeys("Appium");
 	}
 
-	private WebElement waitForElementPresentByXpath(String xpath, String errorMessage, long timeoutInSeconds) {
-		WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-		wait.withMessage(errorMessage + "\n");
-		By by = By.xpath(xpath);
-		return wait.until(
-				ExpectedConditions.presenceOfElementLocated(by)
-		);
-	}
 
 	private WebElement waitForElementPresentByXpath(String xpath, String errorMessage) {
-		return waitForElementPresentByXpath(xpath, errorMessage, 5);
+		return mainPageObject.waitForElementPresentByXpath(xpath, errorMessage, 5);
 	}
 
 	@Test
@@ -70,46 +94,13 @@ public class WikipediaTests extends CoreTestCase {
 		);
 
 		element_to_enter_search_line.sendKeys("Java");
-		waitForElementPresentByXpath(
+		mainPageObject.waitForElementPresentByXpath(
 				"//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']",
 				"Cannot find 'Object-oriented programming language' topic searching by 'Java'",
 				15
 		);
 	}
 
-	@Test
-	public void sendKeysWithMethodsClickAndSendKeysTest() {
-		waitForElementByXpathAndClick(
-				"//*[contains(@text, 'Search Wikipedia')]",
-				"Cannot find search wikipedia input",
-				5
-		);
-
-		waitForElementByXpathAndSendKeys(
-				"//*[contains(@text, 'Search…')]",
-				"Java",
-				"Cannot find search input",
-				5
-		);
-
-		waitForElementPresentByXpath(
-				"//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']",
-				"Cannot find 'Object-oriented programming language' topic searching by 'Java'",
-				15
-		);
-	}
-
-	private WebElement waitForElementByXpathAndClick(String xpath, String errorMessage, long timeoutInSeconds) {
-		WebElement element = waitForElementPresentByXpath(xpath, errorMessage, timeoutInSeconds);
-		element.click();
-		return element;
-	}
-
-	private WebElement waitForElementByXpathAndSendKeys(String xpath, String value, String errorMessage, long timeoutInSeconds) {
-		WebElement element = waitForElementPresentByXpath(xpath, errorMessage, timeoutInSeconds);
-		element.sendKeys(value);
-		return element;
-	}
 
 	@Test
 	public void cancelSearchTest() {
