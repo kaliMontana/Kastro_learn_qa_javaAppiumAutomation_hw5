@@ -1,4 +1,5 @@
 import lib.CoreTestCase;
+import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
 import org.junit.Assert;
@@ -37,6 +38,36 @@ public class WikipediaTests extends CoreTestCase {
 		searchPageObject.waitForCancelButtonToAppear();
 		searchPageObject.clickCancelSearch();
 		searchPageObject.waitForCancelButtonToDisappear();
+	}
+
+	@Test
+	public void testCompareArticleTitle() {
+		SearchPageObject searchPageObject = new SearchPageObject(driver);
+
+		searchPageObject.initSearchInput();
+		searchPageObject.typeSearchLine("Java");
+		searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+
+		ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+		String article_title = articlePageObject.getArticleTitle();
+
+		Assert.assertEquals(
+				"We see unexpected title",
+				"Java (programming language)",
+				article_title
+		);
+	}
+
+	@Test
+	public void testSwipeToArticleFooterTest() {
+		SearchPageObject searchPageObject = new SearchPageObject(driver);
+		searchPageObject.initSearchInput();
+		searchPageObject.typeSearchLine("Appium");
+		searchPageObject.clickByArticleWithSubstring("Appium");
+
+		ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+		articlePageObject.waitForTitleElement();
+		articlePageObject.swipeToFooter();
 	}
 
 	@Test
@@ -98,7 +129,6 @@ public class WikipediaTests extends CoreTestCase {
 				15
 		);
 	}
-
 
 	@Test
 	public void cancelSearchTest() {
@@ -187,43 +217,4 @@ public class WikipediaTests extends CoreTestCase {
 				5
 		);
 	}
-
-
-	@Test
-	public void compareArticleTitleTest() {
-		mainPageObject.waitForElementAndClick(
-				By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-				"Cannot find 'Search wikipedia' input",
-				5
-		);
-
-		mainPageObject.waitForElementAndSendKeys(
-				By.xpath("//*[contains(@text, 'Search…')]"),
-				"Java",
-				"Cannot find search input",
-				5
-		);
-
-		mainPageObject.waitForElementAndClick(
-				By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
-				"Cannot find 'Search wikipedia' input",
-				5
-		);
-
-		WebElement title_element = mainPageObject.waitForElementAndClick(
-				By.id("org.wikipedia:id/view_page_title_text"),
-				"Cannot find article title",
-				15
-		);
-
-		String article_title = title_element.getAttribute("text");
-
-		Assert.assertEquals(
-				"We see unexpected title",
-				"Java (programming language)",
-				article_title
-		);
-	}
-
-
 }

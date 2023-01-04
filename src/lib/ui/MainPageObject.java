@@ -1,7 +1,9 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.TouchAction;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -68,4 +70,36 @@ public class MainPageObject {
 		return element;
 	}
 
+	public void swipeUp(int timeOfSwipe) {
+		TouchAction action = new TouchAction(driver);
+		Dimension size = driver.manage().window().getSize();
+		int x = size.width / 2;
+		int start_y = (int) (size.getHeight() * 0.8);
+		int end_y = (int) (size.getHeight() * 0.2);
+
+		action
+				.press(x, start_y)
+				.waitAction(timeOfSwipe)
+				.moveTo(x, end_y)
+				.release()
+				.perform();
+	}
+
+	protected void swipeQuick() {
+		swipeUp(200);
+	}
+
+	public void swipeUpToFindElement(By by, String error_message, int max_swipes) {
+		int already_swiped = 0;
+		while (driver.findElements(by).size() == 0) {
+
+			if (already_swiped > max_swipes) {
+				waitForElementPresent(by, "Cannot find element by swiping up. \n" + error_message, 0);
+				return;
+			}
+
+			swipeQuick();
+			already_swiped++;
+		}
+	}
 }
