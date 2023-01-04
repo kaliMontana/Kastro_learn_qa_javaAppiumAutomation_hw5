@@ -22,10 +22,21 @@ public class WikipediaTests extends CoreTestCase {
 
 	@Test
 	public void testSearch() {
-		SearchPageObject searchPageObject =  new SearchPageObject(driver);
+		SearchPageObject searchPageObject = new SearchPageObject(driver);
+
 		searchPageObject.initSearchInput();
 		searchPageObject.typeSearchLine("Java");
 		searchPageObject.waitForSearchResult("Object-oriented programming language");
+	}
+
+	@Test
+	public void testCancelSearch() {
+		SearchPageObject searchPageObject = new SearchPageObject(driver);
+
+		searchPageObject.initSearchInput();
+		searchPageObject.waitForCancelButtonToAppear();
+		searchPageObject.clickCancelSearch();
+		searchPageObject.waitForCancelButtonToDisappear();
 	}
 
 	@Test
@@ -178,10 +189,6 @@ public class WikipediaTests extends CoreTestCase {
 	}
 
 
-
-
-
-
 	@Test
 	public void compareArticleTitleTest() {
 		mainPageObject.waitForElementAndClick(
@@ -215,40 +222,6 @@ public class WikipediaTests extends CoreTestCase {
 				"We see unexpected title",
 				"Java (programming language)",
 				article_title
-		);
-	}
-
-	@Test
-	public void CancelSearchWithClearTest() {
-		mainPageObject.waitForElementAndClick(
-				By.id("org.wikipedia:id/search_container"),
-				"Cannot find 'search wikipedia' input",
-				5
-		);
-
-		mainPageObject.waitForElementAndSendKeys(
-				By.xpath("//*[contains(@text, 'Search…')]"),
-				"Java",
-				"Cannot find search input",
-				5
-		);
-
-		mainPageObject.waitForElementAndClear(
-				By.id("org.wikipedia:id/search_src_text"),
-				"Cannot find search filed",
-				5
-		);
-
-		mainPageObject.waitForElementAndClick(
-				By.id("org.wikipedia:id/search_close_btn"),
-				"Cannot find X to cancel search input",
-				5
-		);
-
-		mainPageObject.waitForElementNotPresent(
-				By.id("org.wikipedia:id/search_close_btn"),
-				"X is still present on the page",
-				5
 		);
 	}
 
