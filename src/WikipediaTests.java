@@ -1,5 +1,6 @@
 import lib.CoreTestCase;
 import lib.ui.MainPageObject;
+import lib.ui.SearchPageObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -21,24 +22,10 @@ public class WikipediaTests extends CoreTestCase {
 
 	@Test
 	public void testSearch() {
-		mainPageObject.waitForElementByXpathAndClick(
-				"//*[contains(@text, 'Search Wikipedia')]",
-				"Cannot find search wikipedia input",
-				5
-		);
-
-		mainPageObject.waitForElementByXpathAndSendKeys(
-				"//*[contains(@text, 'Search…')]",
-				"Java",
-				"Cannot find search input",
-				5
-		);
-
-		mainPageObject.waitForElementPresentByXpath(
-				"//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']",
-				"Cannot find 'Object-oriented programming language' topic searching by 'Java'",
-				15
-		);
+		SearchPageObject searchPageObject =  new SearchPageObject(driver);
+		searchPageObject.initSearchInput();
+		searchPageObject.typeSearchLine("Java");
+		searchPageObject.waitForSearchResult("Object-oriented programming language");
 	}
 
 	@Test
@@ -149,20 +136,20 @@ public class WikipediaTests extends CoreTestCase {
 
 	@Test
 	public void generalTestSendKeysWithMethodsClickAndSendKeysTest() {
-		waitForElementAndClick(
+		mainPageObject.waitForElementAndClick(
 				By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
 				"Cannot find search wikipedia input",
 				5
 		);
 
-		waitForElementAndSendKeys(
+		mainPageObject.waitForElementAndSendKeys(
 				By.xpath("//*[contains(@text, 'Search…')]"),
 				"Java",
 				"Cannot find search input",
 				5
 		);
 
-		waitForElementPresent(
+		mainPageObject.waitForElementPresent(
 				By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
 				"Cannot find 'Object-oriented programming language' topic searching by 'Java'",
 				15
@@ -171,19 +158,19 @@ public class WikipediaTests extends CoreTestCase {
 
 	@Test
 	public void generalTestCancelSearchTest() {
-		waitForElementAndClick(
+		mainPageObject.waitForElementAndClick(
 				By.id("org.wikipedia:id/search_container"),
 				"Cannot find 'search wikipedia' input",
 				5
 		);
 
-		waitForElementAndClick(
+		mainPageObject.waitForElementAndClick(
 				By.id("org.wikipedia:id/search_close_btn"),
 				"Cannot find X to cancel search input",
 				5
 		);
 
-		waitForElementNotPresent(
+		mainPageObject.waitForElementNotPresent(
 				By.id("org.wikipedia:id/search_close_btn"),
 				"X is still present on the page",
 				5
@@ -191,56 +178,32 @@ public class WikipediaTests extends CoreTestCase {
 	}
 
 
-	private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
-		WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-		wait.withMessage(errorMessage + "\n");
-		return wait.until(
-				ExpectedConditions.presenceOfElementLocated(by)
-		);
-	}
 
-	private WebElement waitForElementAndClick(By by, String errorMessage, long timeoutInSeconds) {
-		WebElement element = waitForElementPresent(by, errorMessage, timeoutInSeconds);
-		element.click();
-		return element;
-	}
 
-	private WebElement waitForElementAndSendKeys(By by, String value, String errorMessage, long timeoutInSeconds) {
-		WebElement element = waitForElementPresent(by, errorMessage, timeoutInSeconds);
-		element.sendKeys(value);
-		return element;
-	}
 
-	private boolean waitForElementNotPresent(By by, String errorMessage, long timeoutInSeconds) {
-		WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-		wait.withMessage(errorMessage + "\n");
-		return wait.until(
-				ExpectedConditions.invisibilityOfElementLocated(by)
-		);
-	}
 
 	@Test
 	public void compareArticleTitleTest() {
-		waitForElementAndClick(
+		mainPageObject.waitForElementAndClick(
 				By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
 				"Cannot find 'Search wikipedia' input",
 				5
 		);
 
-		waitForElementAndSendKeys(
+		mainPageObject.waitForElementAndSendKeys(
 				By.xpath("//*[contains(@text, 'Search…')]"),
 				"Java",
 				"Cannot find search input",
 				5
 		);
 
-		waitForElementAndClick(
+		mainPageObject.waitForElementAndClick(
 				By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
 				"Cannot find 'Search wikipedia' input",
 				5
 		);
 
-		WebElement title_element = waitForElementAndClick(
+		WebElement title_element = mainPageObject.waitForElementAndClick(
 				By.id("org.wikipedia:id/view_page_title_text"),
 				"Cannot find article title",
 				15
@@ -257,41 +220,37 @@ public class WikipediaTests extends CoreTestCase {
 
 	@Test
 	public void CancelSearchWithClearTest() {
-		waitForElementAndClick(
+		mainPageObject.waitForElementAndClick(
 				By.id("org.wikipedia:id/search_container"),
 				"Cannot find 'search wikipedia' input",
 				5
 		);
 
-		waitForElementAndSendKeys(
+		mainPageObject.waitForElementAndSendKeys(
 				By.xpath("//*[contains(@text, 'Search…')]"),
 				"Java",
 				"Cannot find search input",
 				5
 		);
 
-		waitForElementAndClear(
+		mainPageObject.waitForElementAndClear(
 				By.id("org.wikipedia:id/search_src_text"),
 				"Cannot find search filed",
 				5
 		);
 
-		waitForElementAndClick(
+		mainPageObject.waitForElementAndClick(
 				By.id("org.wikipedia:id/search_close_btn"),
 				"Cannot find X to cancel search input",
 				5
 		);
 
-		waitForElementNotPresent(
+		mainPageObject.waitForElementNotPresent(
 				By.id("org.wikipedia:id/search_close_btn"),
 				"X is still present on the page",
 				5
 		);
 	}
 
-	private WebElement waitForElementAndClear(By by, String errorMessage, long timeoutInSeconds) {
-		WebElement element = waitForElementPresent(by, errorMessage, timeoutInSeconds);
-		element.clear();
-		return element;
-	}
+
 }

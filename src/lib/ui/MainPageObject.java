@@ -34,5 +34,38 @@ public class MainPageObject {
 		return element;
 	}
 
+	public WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
+		WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+		wait.withMessage(errorMessage + "\n");
+		return wait.until(
+				ExpectedConditions.presenceOfElementLocated(by)
+		);
+	}
+
+	public WebElement waitForElementAndClick(By by, String errorMessage, long timeoutInSeconds) {
+		WebElement element = waitForElementPresent(by, errorMessage, timeoutInSeconds);
+		element.click();
+		return element;
+	}
+
+	public WebElement waitForElementAndSendKeys(By by, String value, String errorMessage, long timeoutInSeconds) {
+		WebElement element = waitForElementPresent(by, errorMessage, timeoutInSeconds);
+		element.sendKeys(value);
+		return element;
+	}
+
+	public boolean waitForElementNotPresent(By by, String errorMessage, long timeoutInSeconds) {
+		WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+		wait.withMessage(errorMessage + "\n");
+		return wait.until(
+				ExpectedConditions.invisibilityOfElementLocated(by)
+		);
+	}
+
+	public WebElement waitForElementAndClear(By by, String errorMessage, long timeoutInSeconds) {
+		WebElement element = waitForElementPresent(by, errorMessage, timeoutInSeconds);
+		element.clear();
+		return element;
+	}
 
 }
