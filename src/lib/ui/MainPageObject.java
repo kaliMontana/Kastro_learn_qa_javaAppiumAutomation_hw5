@@ -85,7 +85,7 @@ public class MainPageObject {
 				.perform();
 	}
 
-	protected void swipeQuick() {
+	public void swipeQuick() {
 		swipeUp(200);
 	}
 
@@ -101,5 +101,26 @@ public class MainPageObject {
 			swipeQuick();
 			already_swiped++;
 		}
+	}
+
+	public void swipeElementToLeft(By by, String error_message) {
+		WebElement element = waitForElementPresent(
+				by,
+				error_message,
+				10);
+
+		int left_x = element.getLocation().getX();
+		int right_x = left_x + element.getSize().getWidth();
+		int upper_y = element.getLocation().getY();
+		int lower_y = upper_y + element.getSize().getHeight();
+		int middle_y = (upper_y + lower_y) / 2;
+
+		TouchAction action = new TouchAction(driver);
+		action
+				.press(right_x, middle_y)
+				.waitAction(500)
+				.moveTo(left_x, middle_y)
+				.release()
+				.perform();
 	}
 }
