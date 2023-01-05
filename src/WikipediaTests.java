@@ -1,6 +1,5 @@
 import lib.CoreTestCase;
 import lib.ui.*;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class WikipediaTests extends CoreTestCase {
@@ -43,7 +42,7 @@ public class WikipediaTests extends CoreTestCase {
 		ArticlePageObject articlePageObject = new ArticlePageObject(driver);
 		String article_title = articlePageObject.getArticleTitle();
 
-		Assert.assertEquals(
+		assertEquals(
 				"We see unexpected title",
 				"Java (programming language)",
 				article_title
@@ -93,7 +92,7 @@ public class WikipediaTests extends CoreTestCase {
 		searchPageObject.typeSearchLine(search_line);
 		int amount_of_search_results = searchPageObject.getAmountOfFoundArticles();
 
-		Assert.assertTrue("We found too few results!",
+		assertTrue("We found too few results!",
 				amount_of_search_results > 0
 		);
 	}
@@ -122,7 +121,7 @@ public class WikipediaTests extends CoreTestCase {
 		this.rotateScreenLandscape();
 		String title_after_Rotation = articlePageObject.getArticleTitle();
 
-		Assert.assertEquals(
+		assertEquals(
 				"Article title have been changed after screen rotation",
 				title_before_Rotation,
 				title_after_Rotation
@@ -131,7 +130,7 @@ public class WikipediaTests extends CoreTestCase {
 		this.rotateScreenPortrait();
 		String title_after_second_Rotation = articlePageObject.getArticleTitle();
 
-		Assert.assertEquals(
+		assertEquals(
 				"Article title have been changed after screen rotation",
 				title_before_Rotation,
 				title_after_second_Rotation
