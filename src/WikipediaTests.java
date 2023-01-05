@@ -92,6 +92,30 @@ public class WikipediaTests extends CoreTestCase {
 	}
 
 	@Test
+	public void testAmountOfNotEmptySearchTest() {
+		SearchPageObject searchPageObject = new SearchPageObject(driver);
+		searchPageObject.initSearchInput();
+		String search_line = "Linking park discography";
+		searchPageObject.typeSearchLine(search_line);
+		int amount_of_search_results = searchPageObject.getAmountOfFoundArticles();
+
+		Assert.assertTrue("We found too few results!",
+				amount_of_search_results > 0
+		);
+	}
+
+	@Test
+	public void testAmountOfEmptySearch() {
+		SearchPageObject searchPageObject = new SearchPageObject(driver);
+		searchPageObject.initSearchInput();
+		String search_line = "dsgffgdfgfd";
+		searchPageObject.typeSearchLine(search_line);
+		searchPageObject.waitForEmptyResultsLabel();
+		searchPageObject.assertThereIsNotResultsOfSearch();
+
+	}
+
+	@Test
 	public void sendKeysTest() throws InterruptedException {
 		WebElement element_to_init_search = driver.findElementByXPath("//*[contains(@text, 'Search Wikipedia')]");
 		element_to_init_search.click();

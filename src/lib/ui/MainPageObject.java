@@ -8,6 +8,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 public class MainPageObject {
 	protected AppiumDriver driver;
 
@@ -122,5 +124,18 @@ public class MainPageObject {
 				.moveTo(left_x, middle_y)
 				.release()
 				.perform();
+	}
+
+	public int getAmountOfElements(By by) {
+		List elements = driver.findElements(by);
+		return elements.size();
+	}
+
+	public void assertElementNotPresent(By by, String error_message) {
+		int amount_of_elements = getAmountOfElements(by);
+		if (amount_of_elements > 0) {
+			String default_message = "An element '" + by.toString() + "' suppose to be not present";
+			throw new AssertionError(default_message + " " + error_message);
+		}
 	}
 }
