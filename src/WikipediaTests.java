@@ -1,16 +1,11 @@
 import lib.CoreTestCase;
-import lib.ui.*;
+import lib.ui.ArticlePageObject;
+import lib.ui.MyListsPageObject;
+import lib.ui.NavigationUI;
+import lib.ui.SearchPageObject;
 import org.junit.Test;
 
 public class WikipediaTests extends CoreTestCase {
-	private MainPageObject mainPageObject;
-
-
-	protected void setUp() throws Exception {
-		super.setUp();
-
-		mainPageObject = new MainPageObject(driver);
-	}
 
 	@Test
 	public void testSearch() {
