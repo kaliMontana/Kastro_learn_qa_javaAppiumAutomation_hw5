@@ -45,6 +45,17 @@ public class SearchTests extends CoreTestCase {
 		searchPageObject.typeSearchLine(search_line);
 		searchPageObject.waitForEmptyResultsLabel();
 		searchPageObject.assertThereIsNotResultsOfSearch();
+	}
 
+	@Test
+	public void testCancelSearchEx3() {
+		SearchPageObject searchPageObject = new SearchPageObject(driver);
+		searchPageObject.initSearchInput();
+		String search_line = "Encarta";
+		searchPageObject.typeSearchLine(search_line);
+		searchPageObject.getAmountOfFoundArticles();
+		searchPageObject.waitForCancelButtonToAppear();
+		searchPageObject.clickCancelSearch();
+		searchPageObject.waitForArticlesDisappear();
 	}
 }
