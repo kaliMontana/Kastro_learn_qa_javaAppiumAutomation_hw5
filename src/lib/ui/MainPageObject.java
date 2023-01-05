@@ -17,27 +17,6 @@ public class MainPageObject {
 		this.driver = driver;
 	}
 
-	public WebElement waitForElementPresentByXpath(String xpath, String errorMessage, long timeoutInSeconds) {
-		WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-		wait.withMessage(errorMessage + "\n");
-		By by = By.xpath(xpath);
-		return wait.until(
-				ExpectedConditions.presenceOfElementLocated(by)
-		);
-	}
-
-	public WebElement waitForElementByXpathAndClick(String xpath, String errorMessage, long timeoutInSeconds) {
-		WebElement element = waitForElementPresentByXpath(xpath, errorMessage, timeoutInSeconds);
-		element.click();
-		return element;
-	}
-
-	public WebElement waitForElementByXpathAndSendKeys(String xpath, String value, String errorMessage, long timeoutInSeconds) {
-		WebElement element = waitForElementPresentByXpath(xpath, errorMessage, timeoutInSeconds);
-		element.sendKeys(value);
-		return element;
-	}
-
 	public WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
 		WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
 		wait.withMessage(errorMessage + "\n");
