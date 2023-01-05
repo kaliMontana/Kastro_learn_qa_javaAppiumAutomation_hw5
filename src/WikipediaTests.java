@@ -116,6 +116,46 @@ public class WikipediaTests extends CoreTestCase {
 	}
 
 	@Test
+	public void testChangeScreenOrientationOnSearchResults() {
+		SearchPageObject searchPageObject = new SearchPageObject(driver);
+
+		searchPageObject.initSearchInput();
+		searchPageObject.typeSearchLine("Java");
+		searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+
+		ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+		String title_before_Rotation = articlePageObject.getArticleTitle();
+		this.rotateScreenLandscape();
+		String title_after_Rotation = articlePageObject.getArticleTitle();
+
+		Assert.assertEquals(
+				"Article title have been changed after screen rotation",
+				title_before_Rotation,
+				title_after_Rotation
+		);
+
+		this.rotateScreenPortrait();
+		String title_after_second_Rotation = articlePageObject.getArticleTitle();
+
+		Assert.assertEquals(
+				"Article title have been changed after screen rotation",
+				title_before_Rotation,
+				title_after_second_Rotation
+		);
+	}
+
+	@Test
+	public void testCheckSearchArticleInBackground() {
+		SearchPageObject searchPageObject = new SearchPageObject(driver);
+
+		searchPageObject.initSearchInput();
+		searchPageObject.typeSearchLine("Java");
+		searchPageObject.waitForSearchResult("Object-oriented programming language");
+		this.backGroundApp(3);
+		searchPageObject.waitForSearchResult("Object-oriented programming language");
+	}
+
+	@Test
 	public void sendKeysTest() throws InterruptedException {
 		WebElement element_to_init_search = driver.findElementByXPath("//*[contains(@text, 'Search Wikipedia')]");
 		element_to_init_search.click();
