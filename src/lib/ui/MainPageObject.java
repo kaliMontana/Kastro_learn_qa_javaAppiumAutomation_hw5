@@ -117,4 +117,23 @@ public class MainPageObject {
 			throw new AssertionError(default_message + " " + error_message);
 		}
 	}
+
+	public String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeoutInSeconds) {
+		WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
+		return element.getAttribute(attribute);
+	}
+
+	public void assertElementPresent(By by, String attribute, String error_message, long timeoutIntSeconds) {
+		String attribute_value = waitForElementAndGetAttribute(
+				by,
+				attribute,
+				error_message,
+				timeoutIntSeconds
+		);
+
+		if (!attribute_value.contains("_title_")) {
+			String default_message = "Element 'Title' by '" + by.toString() + "' suppose to be present. \n";
+			throw new AssertionError(default_message + " " + error_message);
+		}
+	}
 }

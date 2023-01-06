@@ -120,4 +120,13 @@ public class ArticlePageObject extends MainPageObject {
 				5
 		);
 	}
+
+	public void assertThereIsElementTitle() {
+		this.assertElementPresent(
+				By.id(TITLE),
+				"resourceId",
+				"Not found element 'Title'",
+				15
+		);
+	}
 }
