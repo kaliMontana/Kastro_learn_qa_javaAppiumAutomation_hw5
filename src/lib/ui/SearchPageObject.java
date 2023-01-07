@@ -9,6 +9,7 @@ public class SearchPageObject extends MainPageObject {
 			SEARCH_INPUT = "//*[contains(@text, 'Search…')]",
 			SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
 			SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
+			SEARCH_RESULT_BY_TITLE_SUBSTRING_AND_DESCRIPTION_SUBSTRING_TPL = "//*[@class='android.widget.LinearLayout']/*[@text='{TITLE_SUBSTRING}']/../*[@text='{DESCRIPTION_SUBSTRING}']",
 			SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
 			SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
 			SEARCH_ARTICLE_CONTAINER = "org.wikipedia:id/search_results_container";
@@ -21,6 +22,10 @@ public class SearchPageObject extends MainPageObject {
 	/*TEMPLATE METHODS*/
 	private static String getResultSearchElement(String substring) {
 		return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+	}
+
+	private static String getResultSearchElement(String title_substring, String description_substring) {
+		return SEARCH_RESULT_BY_TITLE_SUBSTRING_AND_DESCRIPTION_SUBSTRING_TPL.replace("{TITLE_SUBSTRING}", title_substring).replace("{DESCRIPTION_SUBSTRING}", description_substring);
 	}
 	/*TEMPLATE METHODS*/
 
@@ -48,6 +53,11 @@ public class SearchPageObject extends MainPageObject {
 	public void waitForSearchResult(String substring) {
 		String search_result_xpath = getResultSearchElement(substring);
 		this.waitForElementPresent(By.xpath(search_result_xpath), "Cannot find search result with substring " + substring, 15);
+	}
+
+	public void waitForElementByTitleAndDescription(String title_substring, String description_substring) {
+		String search_result_xpath = getResultSearchElement(title_substring, description_substring);
+		this.waitForElementPresent(By.xpath(search_result_xpath), "Cannot find search result with substring " + title_substring + " and " + description_substring, 15);
 	}
 
 	public void clickByArticleWithSubstring(String substring) {
@@ -83,5 +93,9 @@ public class SearchPageObject extends MainPageObject {
 				"Results are still present on the page",
 				5
 		);
+	}
+
+	public void assertThereAreMoreThanThreeArticles() {
+		this.assertElementPresentsLessThanThree(By.xpath(SEARCH_RESULT_ELEMENT), "There are very few articles", 3);
 	}
 }

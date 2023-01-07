@@ -118,6 +118,14 @@ public class MainPageObject {
 		}
 	}
 
+	public void assertElementPresentsLessThanThree(By by, String error_message, int result_amount) {
+		int amount_of_elements = getAmountOfElements(by);
+		if (amount_of_elements >= result_amount) {
+			String default_message = "Result elements less than three " + result_amount;
+			throw new AssertionError(default_message + " " + error_message);
+		}
+	}
+
 	public String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeoutInSeconds) {
 		WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
 		return element.getAttribute(attribute);
