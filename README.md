@@ -27,3 +27,61 @@ language)” и описание “Object-oriented programming language”.
 Результатом выполнения задания должен быть дифф к коду, который был написан на четвертом занятии. В этом диффе должны
 быть вспомогательные методы, лежащие в соответствующих классах и код теста, лежащего в соответствующем классе. Тест
 должен работать (т.е. проходить при верном результате поиска и обязательно падать, если результат поиска изменился).
+
+
+Ex11: Для тех, кто проходит курс без макбук, надо прислать список файлов, в которые Вам пришлось бы вносить изменения,
+чтобы адаптировать под iOS тест на удаление одной сохраненной статьи из двух.
+
+Ответ:
+
+1-	Изменять класс CoreTestCase, писать метод для выбора платформа запуска теста.
+
+2-	В папке  lib создать класс  Platform  и переместить туда метод DesireCapabilities и  все нужные поля.
+
+3-	В папке ui создать папки android  и ios.
+
+4-	В папка  android  создать абстрактные классы androidSearchPageObject и iOSSearchPageObject, перемещать туда все константы.
+
+5-	В папке  lib создать пакет factories и тут создать класс SearchPageObjectFactory.
+
+6-	В классе Platform создать статическое поле  instance, приватный конструктор и метод getInstance.
+
+7-	 В классе CoreTestCase изменять способ передачи значения для переменой driver.
+
+8-	А классе SearchPageObjectFactory написать метод get.
+
+9-	 В классе MyListTests поменять создание объектов SearchObject через  SearchPageObjectFactory.
+
+10-	В классе ArticlePageObject поменять метод getArticleTitle. чтобы искать элемент по name.
+
+11-	В классе MyListTests добавить условия (android, ios) для тех методов которые отличаются в работе в разных платформах.
+
+12-	В классе ArticlePageObject создать метод addArticlesToMySaved для ios.
+
+13-	 Превращать классе  NavigationUI в абстрактный.
+
+14-	В пакете ui.android создать класс AndroidNavigationUI.
+
+15-	В пакете ui.ios создать класс iOSNavigationUI
+
+16-	В классе класс iOSNavigationUI написать селектор MY_LIST_LINK.
+
+17-	В пакете factories создать класс NavigationUIFactory.
+
+18-	В классе MyListTests используем класс NavigationUIFactory для создания объект типа NavigationUI.
+
+19-	Поменять класс MyListPageObject.
+
+20-	Создать классы AndroidMyListPageObject и iOSMyListPageObject.
+
+21-	Создать класс MyListPageObjectFactory.
+
+22-	В классе MyListTests используем класс MyListPageObjectFactory для создания объекта типа MyListPageObject.
+
+23-	В классе iOSMyListPageObject изменяем локатор для ARTICLE_BY_TILTE_TPL.
+
+24-	В классе MyListPageObject поменять метод swipeElementToLeft, Чтобы работал в зависимости от платформы.
+
+25-	В классе MainPageOBject написать метод clickElementToTheUpperCorner, чтобы кликнуть по кнопке удаления стати.
+
+26-	В кдассе MyListPageObject изменять метод swipeByArticleToDelete.
